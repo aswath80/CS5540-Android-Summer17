@@ -20,6 +20,7 @@ public class NetworkUtils {
     private static final String SORT_BY_PARAM = "sortBy";
     private static final String SORT_BY_LATEST_VALUE = "latest";
     private static final String API_KEY_PARAM = "apiKey";
+    //TODO: Insert API key here!
     private static final String API_KEY_VALUE = "8623c400f99048b99afc68e61f8366e4";
 
     /**
