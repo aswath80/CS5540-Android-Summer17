@@ -3,15 +3,16 @@ package com.m2e.cs5540.autopresence.login;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.EditText;
 
+import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.database.DatabaseUtil;
+import com.m2e.cs5540.autopresence.test.AppTest;
 
 /**
  * Created by maeswara on 7/8/2017.
  */
-public class LoginAsyncTaskLoader extends AsyncTaskLoader<String> {
+public class LoginAsyncTaskLoader extends AsyncTaskLoader<AsyncLoaderStatus> {
    private static final String TAG = LoginAsyncTaskLoader.class.getName();
    private DatabaseUtil databaseUtil = DatabaseUtil.getInstance();
    private EditText usernameEditText;
@@ -23,23 +24,28 @@ public class LoginAsyncTaskLoader extends AsyncTaskLoader<String> {
       Log.d(TAG, "$$$$ LoginAsyncTaskLoader created");
    }
 
-
    @Override protected void onStartLoading() {
       Log.d(TAG, "$$$$ LoginAsyncTaskLoader onStartLoading");
       //Log.d(TAG, "$$$$ LoginAsyncTaskLoader takeContentChanged() = " +
       //      takeContentChanged());
-      if(takeContentChanged()) {
+      if (takeContentChanged()) {
          forceLoad();
       }
    }
 
-   @Override public String loadInBackground() {
+   @Override public AsyncLoaderStatus loadInBackground() {
+      AsyncLoaderStatus loaderStatus = new AsyncLoaderStatus();
       Log.d(TAG, "$$$$ LoginAsyncTaskLoader loadInBackground");
-      return databaseUtil.getUserPassword(usernameEditText.getText().toString());
+      try {
+         new AppTest().testCreateUser();
+         loaderStatus.setResult("Success");
+      } catch (Exception e) {
+         loaderStatus.setException(e);
+      }
+      return loaderStatus;
    }
 
-
-   @Override public void deliverResult(String data) {
+   @Override public void deliverResult(AsyncLoaderStatus data) {
       super.deliverResult(data);
       Log.d(TAG, "$$$$ LoginAsyncTaskLoader deliverResult " + data);
    }

@@ -10,13 +10,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.m2e.cs5540.autopresence.R;
+import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
 
 /**
  * Created by maeswara on 7/8/2017.
  */
-public class LoginActivity extends BaseActivity
-      implements View.OnClickListener, LoaderManager.LoaderCallbacks<String> {
+public class LoginActivity extends BaseActivity implements View.OnClickListener,
+      LoaderManager.LoaderCallbacks<AsyncLoaderStatus> {
    private static final String TAG = LoginActivity.class.getName();
    private EditText usernameEditText;
    private Button loginButton;
@@ -24,7 +25,7 @@ public class LoginActivity extends BaseActivity
    @Override protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.login_layout);
-      this.usernameEditText = (EditText)findViewById(R.id.usernameText);
+      this.usernameEditText = (EditText) findViewById(R.id.usernameText);
       addButtonClickListener();
    }
 
@@ -53,21 +54,26 @@ public class LoginActivity extends BaseActivity
       }
    }
 
-   @Override public Loader<String> onCreateLoader(int id, Bundle args) {
+   @Override
+   public Loader<AsyncLoaderStatus> onCreateLoader(int id, Bundle args) {
       Log.d(TAG, "$$$$$$ LoginActivity.onCreateLoader called");
       return new LoginAsyncTaskLoader(this, usernameEditText);
    }
 
-   @Override
-   public void onLoadFinished(Loader<String> loader, String password) {
+   @Override public void onLoadFinished(Loader<AsyncLoaderStatus> loader,
+         AsyncLoaderStatus loaderStatus) {
       hideProgressDialog();
       Log.d(TAG, "$$$$$$ LoginActivity.onLoadFinished called");
-      Log.d(TAG, "$$$$$$ Password from database " + password);
-      Toast.makeText(this, "Password from DB is " + password,
-            Toast.LENGTH_LONG).show();
+      if (loaderStatus.hasException()) {
+         Toast.makeText(this, "Error " + loaderStatus.getExceptionMessage(),
+               Toast.LENGTH_LONG).show();
+      } else {
+         Toast.makeText(this, "Password from DB is " + loaderStatus.getResult(),
+               Toast.LENGTH_LONG).show();
+      }
    }
 
-   @Override public void onLoaderReset(Loader<String> loader) {
+   @Override public void onLoaderReset(Loader<AsyncLoaderStatus> loader) {
 
    }
 }
