@@ -7,19 +7,27 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuAdapter;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.sargent.mark.todolist.data.Contract;
 import com.sargent.mark.todolist.data.DBHelper;
 
 public class MainActivity extends AppCompatActivity
       implements AddToDoFragment.OnDialogCloseListener,
-      UpdateToDoFragment.OnUpdateDialogCloseListener {
+      UpdateToDoFragment.OnUpdateDialogCloseListener,
+      AdapterView.OnItemSelectedListener {
 
    private RecyclerView rv;
    private FloatingActionButton button;
@@ -167,5 +175,46 @@ public class MainActivity extends AppCompatActivity
          String description, String category, long id) {
       updateToDo(db, year, month, day, description, category, id);
       adapter.swapCursor(getAllItems(db));
+   }
+
+   //[Mani]TODO:Inflate category filter menu and populate menu items
+   @Override public boolean onCreateOptionsMenu(Menu menu) {
+      getMenuInflater().inflate(R.menu.menu, menu);
+
+      MenuItem item = menu.findItem(R.id.categoryMenuItem);
+      Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+      spinner.setOnItemSelectedListener(this);
+
+      ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+            R.array.menu_item_todo_category_array,
+            android.R.layout.simple_spinner_item);
+      adapter.setDropDownViewResource(
+            android.R.layout.simple_spinner_dropdown_item);
+
+      spinner.setAdapter(adapter);
+      return true;
+   }
+
+   //[Mani]TODO:Menu selection listener to handle menu item selection
+   // from Spinner
+   public void onItemSelected(AdapterView<?> parent, View view, int pos,
+         long id) {
+      String selectedCategory = parent.getItemAtPosition(pos).toString();
+      Log.d(TAG, "$$$ Menu item selected: " + selectedCategory);
+      if ("All".equalsIgnoreCase(selectedCategory)) {
+         adapter.swapCursor(getAllItems(db));
+      } else {
+         adapter.swapCursor(getItemsForCategory(db, selectedCategory));
+      }
+   }
+
+   public void onNothingSelected(AdapterView<?> parent) {
+   }
+
+   //[Mani]Todo: Retrieve to-do items from data base based on category selected
+   private Cursor getItemsForCategory(SQLiteDatabase db, String category) {
+      return db.query(Contract.TABLE_TODO.TABLE_NAME, null,
+            Contract.TABLE_TODO.COLUMN_NAME_CATEGORY + "='" + category + "'",
+            null, null, null, Contract.TABLE_TODO.COLUMN_NAME_DUE_DATE);
    }
 }

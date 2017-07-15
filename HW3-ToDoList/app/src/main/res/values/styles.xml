@@ -6,8 +6,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
     </style>
-
+    <!-- [Mani]TODO:Change default menu item text color -->
+    <style name="MenuItemTextAppearance">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
 
 </resources>

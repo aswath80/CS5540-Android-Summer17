@@ -13,6 +13,10 @@ import android.widget.Toast;
 
 import com.sargent.mark.todolist.data.Contract;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by mark on 7/4/17.
  */
@@ -111,11 +115,23 @@ public class ToDoListAdapter
                cursor.getColumnIndex(Contract.TABLE_TODO.COLUMN_NAME_DONE)) ==
                1;
          descr.setText(description);
-         due.setText(duedate);
+         due.setText("Due: " + getFormattedDate(duedate));
          //[Mani]Display the category information in list of to-dos
-         cat.setText(category);
+         cat.setText("Category: " + category);
          holder.itemView.setTag(id);
          setItemBackgroundBasedOnDoneStatus();
+      }
+
+      private String getFormattedDate(String dateString) {
+         try {
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = sdf1.parse(dateString);
+            SimpleDateFormat sdf2 = new SimpleDateFormat("EEE, MMM d, yyyy");
+            return sdf2.format(date);
+         } catch (ParseException e) {
+            Log.e(TAG, "Error parsing date string " + dateString, e);
+            return dateString;
+         }
       }
 
       @Override public void onClick(View v) {
