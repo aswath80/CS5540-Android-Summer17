@@ -1,6 +1,7 @@
 package com.m2e.cs5540.autopresence.login;
 
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
+import com.m2e.cs5540.autopresence.service.LocationUpdateService;
+import com.m2e.cs5540.autopresence.vao.User;
 
 /**
  * Created by maeswara on 7/8/2017.
@@ -68,9 +71,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
          Toast.makeText(this, "Error " + loaderStatus.getExceptionMessage(),
                Toast.LENGTH_LONG).show();
       } else {
-         Toast.makeText(this, "Password from DB is " + loaderStatus.getResult(),
+         String username = loaderStatus.getResult() != null ?
+               ((User) loaderStatus.getResult()).getName() : null;
+         Toast.makeText(this, "Logged in user is " + username,
                Toast.LENGTH_LONG).show();
+         startLocationService(loaderStatus);
+         //new LocationServiceAsyncTask().execute(
+         //      "893b671d-d09e-428f-a251-8b21887d76a4");
       }
+   }
+
+   private void startLocationService(AsyncLoaderStatus loaderStatus) {
+      User user = (User) loaderStatus.getResult();
+      Intent locationServiceIntent = new Intent(this,
+            LocationUpdateService.class);
+      locationServiceIntent.putExtra("userId", user.getId());
+      startService(locationServiceIntent);
    }
 
    @Override public void onLoaderReset(Loader<AsyncLoaderStatus> loader) {

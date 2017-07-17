@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_centerHorizontal="true"
+             android:layout_centerInParent="true"
+             android:layout_centerVertical="true"
              android:layout_gravity="center"
              android:gravity="center"
-             android:layout_centerVertical="true"
-             android:layout_centerInParent="true"
-             android:layout_centerHorizontal="true"
              android:stretchColumns="2"
              tools:context=".login.LoginActivity">
 
@@ -21,6 +21,7 @@
 
         <EditText
             android:id="@+id/usernameText"
+            android:background="@drawable/round_rectangle"
             android:gravity="right"
             android:hint="Enter username"
             android:padding="5dp"/>
@@ -36,10 +37,11 @@
 
         <EditText
             android:id="@+id/passwordText"
+            android:background="@drawable/round_rectangle"
             android:gravity="right"
             android:hint="Enter password"
-            android:padding="5dp"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+            android:padding="5dp"/>
     </TableRow>
 
     <TableRow
@@ -52,8 +54,8 @@
 
         <Button
             android:id="@+id/loginButton"
+            android:layout_gravity="center"
             android:gravity="right"
-            android:text="@string/login"
-            android:layout_gravity="center"/>
+            android:text="@string/login"/>
     </TableRow>
 </TableLayout>

@@ -1,7 +1,5 @@
 package com.m2e.cs5540.autopresence.vao;
 
-import java.util.Date;
-
 /**
  * Created by maeswara on 7/15/2017.
  */
@@ -9,7 +7,7 @@ public class UserCoordinate {
    private String userId;
    private double currentLatitude;
    private double currentLongitude;
-   private Date lastUpdateTime;
+   private String lastUpdateTime;
 
    public String getUserId() {
       return userId;
@@ -35,11 +33,11 @@ public class UserCoordinate {
       this.currentLongitude = currentLongitude;
    }
 
-   public Date getLastUpdateTime() {
+   public String getLastUpdateTime() {
       return lastUpdateTime;
    }
 
-   public void setLastUpdateTime(Date lastUpdateTime) {
+   public void setLastUpdateTime(String lastUpdateTime) {
       this.lastUpdateTime = lastUpdateTime;
    }
 }

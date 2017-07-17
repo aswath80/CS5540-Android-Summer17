@@ -9,16 +9,15 @@ import android.widget.TextView;
  * Created by maeswara on 7/6/2017.
  */
 public class AppLocationListener implements LocationListener {
-    private TextView textView;
+    private Location location;
 
-    public AppLocationListener(TextView textView) {
-        this.textView = textView;
+    public AppLocationListener() {
+
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        textView.setText("Your location: latitude: " + location.getLatitude()
-                + " longitude: " + location.getLongitude());
+        this.location = location;
     }
 
     @Override
@@ -34,5 +33,9 @@ public class AppLocationListener implements LocationListener {
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    public Location getLocation() {
+        return location;
     }
 }

@@ -6,8 +6,9 @@ import android.util.Log;
 import android.widget.EditText;
 
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
+import com.m2e.cs5540.autopresence.context.AppContext;
 import com.m2e.cs5540.autopresence.database.DatabaseUtil;
-import com.m2e.cs5540.autopresence.test.AppTest;
+import com.m2e.cs5540.autopresence.vao.User;
 
 /**
  * Created by maeswara on 7/8/2017.
@@ -37,8 +38,11 @@ public class LoginAsyncTaskLoader extends AsyncTaskLoader<AsyncLoaderStatus> {
       AsyncLoaderStatus loaderStatus = new AsyncLoaderStatus();
       Log.d(TAG, "$$$$ LoginAsyncTaskLoader loadInBackground");
       try {
-         new AppTest().testCreateUser();
-         loaderStatus.setResult("Success");
+         User user = databaseUtil.getUser(
+               usernameEditText.getText().toString());
+         Log.d(TAG, "$$$$ Logged in user = " + user.getName());
+         AppContext.initContext(user);
+         loaderStatus.setResult(user);
       } catch (Exception e) {
          loaderStatus.setException(e);
       }
