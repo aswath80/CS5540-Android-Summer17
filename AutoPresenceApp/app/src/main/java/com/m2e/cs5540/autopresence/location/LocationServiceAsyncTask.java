@@ -11,6 +11,7 @@ import java.util.Date;
  * Created by maeswara on 7/8/2017.
  */
 public class LocationServiceAsyncTask extends AsyncTask<String, Void, String> {
+
    private static final String TAG = LocationServiceAsyncTask.class.getName();
    private DatabaseUtil databaseUtil = DatabaseUtil.getInstance();
 
