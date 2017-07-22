@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.m2e.cs5540.autopresence.R;
 import com.m2e.cs5540.autopresence.base.AsyncLoaderStatus;
 import com.m2e.cs5540.autopresence.base.BaseActivity;
+import com.m2e.cs5540.autopresence.register.RegisterActivity;
 import com.m2e.cs5540.autopresence.service.LocationUpdateService;
 import com.m2e.cs5540.autopresence.vao.User;
 
@@ -21,14 +22,28 @@ import com.m2e.cs5540.autopresence.vao.User;
  */
 public class LoginActivity extends BaseActivity implements View.OnClickListener,
       LoaderManager.LoaderCallbacks<AsyncLoaderStatus> {
+
    private static final String TAG = LoginActivity.class.getName();
    private EditText usernameEditText;
    private Button loginButton;
+   private Button register;
+
 
    @Override protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.login_layout);
       this.usernameEditText = (EditText) findViewById(R.id.usernameText);
+
+      this.register = (Button) findViewById(R.id.btn_signup);
+      this.register.setOnClickListener(new View.OnClickListener() {
+
+         @Override
+         public void onClick(View v) {
+            // Start the Signup activity
+            Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+            startActivityForResult(intent, 0);
+         }
+      });
       addButtonClickListener();
    }
 
@@ -83,8 +98,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
    private void startLocationService(AsyncLoaderStatus loaderStatus) {
       User user = (User) loaderStatus.getResult();
-      Intent locationServiceIntent = new Intent(this,
-            LocationUpdateService.class);
+      Intent locationServiceIntent = new Intent(this, LocationUpdateService.class);
       locationServiceIntent.putExtra("userId", user.getId());
       startService(locationServiceIntent);
    }

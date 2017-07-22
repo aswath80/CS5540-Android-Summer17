@@ -14,6 +14,7 @@ import com.m2e.cs5540.autopresence.vao.User;
  * Created by maeswara on 7/8/2017.
  */
 public class LoginAsyncTaskLoader extends AsyncTaskLoader<AsyncLoaderStatus> {
+
    private static final String TAG = LoginAsyncTaskLoader.class.getName();
    private DatabaseUtil databaseUtil = DatabaseUtil.getInstance();
    private EditText usernameEditText;

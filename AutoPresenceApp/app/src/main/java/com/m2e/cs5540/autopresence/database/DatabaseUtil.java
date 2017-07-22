@@ -13,6 +13,7 @@ import com.m2e.cs5540.autopresence.vao.Course;
 import com.m2e.cs5540.autopresence.vao.CourseRegistration;
 import com.m2e.cs5540.autopresence.vao.User;
 import com.m2e.cs5540.autopresence.vao.UserCoordinate;
+import com.m2e.cs5540.autopresence.vao.UserRegistration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,13 +24,12 @@ import java.util.Map;
  * Created by maeswara on 7/8/2017.
  */
 public class DatabaseUtil {
+
    private static final String TAG = DatabaseUtil.class.getName();
-   private DatabaseReference database =
-         FirebaseDatabase.getInstance().getReference();
+   private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
    private static DatabaseUtil databaseUtil = new DatabaseUtil();
 
    private DatabaseUtil() {
-
    }
 
    public static DatabaseUtil getInstance() {
@@ -87,6 +87,20 @@ public class DatabaseUtil {
                courseRegistration.getUserId() + " - " +
                courseRegistration.getCourseId() + " into firebase. Cause: " +
                e.getClass().getName() + ": " + e.getMessage(), e);
+      }
+   }
+
+   public void updateUserRegistration(UserRegistration reg) {
+      try{
+         DatabaseReference userRegsRef = database.child("userRegistrations");
+         Log.d(TAG, "$$$ userRegsRef: " + userRegsRef);
+         if (userRegsRef != null) {
+            userRegsRef.push().setValue(reg);
+         }
+      } catch (Exception e) {
+         Log.e(TAG, "User Registration failed", e);
+         throw new AppException("Error saving user info for user " +
+                  " into firebase. Cause: " + e.getClass().getName() + ": " + e.getMessage(), e);
       }
    }
 
@@ -255,4 +269,6 @@ public class DatabaseUtil {
       Log.d(TAG, "$$$ Returning " + objList + " for DatabaseReference");
       return objList.size() > 0 ? objList.get(0) : null;
    }
+
+
 }
