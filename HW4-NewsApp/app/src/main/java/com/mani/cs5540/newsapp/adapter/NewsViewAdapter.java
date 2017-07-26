@@ -75,7 +75,7 @@ public class NewsViewAdapter
          ImageView imageView) {
       //TODO:[ANSWER(6)]: Using Picasso API to load image from image URL in
       // JSON response.
-      Picasso.with(context).load(imageUrl).into(imageView);
+      Picasso.with(context).load(imageUrl).resize(200, 250).into(imageView);
    }
 
    @Override public int getItemCount() {

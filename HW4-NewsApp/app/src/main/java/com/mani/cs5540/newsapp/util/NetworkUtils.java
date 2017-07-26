@@ -14,20 +14,17 @@ import java.util.Scanner;
  * Created by maeswara on 6/17/2017.
  */
 public class NetworkUtils {
-   //[Mani]TODO: NYTimes news API and key configured here in NetworkUtils
+   //[Mani]TODO: News API and key configured here in NetworkUtils
    private static final String TAG = "NetworkUtils";
-   //private static final String NEWS_BASE_URL = "https://newsapi" +
-   //      ".org/v1/articles";
    private static final String NEWS_BASE_URL =
-         "https://api.nytimes.com/svc/mostpopular/v2/mostviewed/U.S./30.json";
-   //private static final String SOURCE_PARAM = "source";
-   //private static final String SORT_BY_PARAM = "sortBy";
-   //private static final String SORT_BY_LATEST_VALUE = "latest";
-   //private static final String API_KEY_PARAM = "apiKey";
-   private static final String API_KEY_PARAM = "api-key";
+         "https://newsapi.org/v1/articles";
+   private static final String SOURCE_PARAM = "source";
+   private static final String SORT_BY_PARAM = "sortBy";
+   private static final String SORT_BY_LATEST_VALUE = "latest";
+   private static final String API_KEY_PARAM = "apiKey";
    //TODO: Insert API key here! The configured one is Mani's
    private static final String API_KEY_VALUE =
-         "44628140c11a48ef886c895d4bf4ae78";
+         "8623c400f99048b99afc68e61f8366e4";
 
    /**
     * Builds the URL used to talk to the news api using given api-key
@@ -36,11 +33,12 @@ public class NetworkUtils {
     */
    public static URL buildUrl() {
       //[Mani]TODO: Build news API URL
-      Uri newsUri = Uri.parse(NEWS_BASE_URL).buildUpon()
-            //.appendQueryParameter(SOURCE_PARAM, source)
-            //.appendQueryParameter(SORT_BY_PARAM, SORT_BY_LATEST_VALUE)
-            .appendQueryParameter(API_KEY_PARAM, API_KEY_VALUE).build();
+      Uri newsUri = Uri.parse(NEWS_BASE_URL).buildUpon().appendQueryParameter(
+            SOURCE_PARAM, "the-next-web").appendQueryParameter(SORT_BY_PARAM,
+            SORT_BY_LATEST_VALUE).appendQueryParameter(API_KEY_PARAM,
+            API_KEY_VALUE).build();
       try {
+         Log.d(TAG, "$$$ News URI: " + newsUri.toString());
          return new URL(newsUri.toString());
       } catch (MalformedURLException e) {
          e.printStackTrace();
@@ -69,7 +67,9 @@ public class NetworkUtils {
 
          boolean hasInput = scanner.hasNext();
          if (hasInput) {
-            return scanner.next();
+            String jsonResponse = scanner.next();
+            Log.d(TAG, "$$$ JSON Response from news API:\n" + jsonResponse);
+            return jsonResponse;
          } else {
             return null;
          }

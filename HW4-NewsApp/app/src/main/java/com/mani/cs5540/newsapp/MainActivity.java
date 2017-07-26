@@ -61,14 +61,14 @@ public class MainActivity extends AppCompatActivity
             this);
       boolean firstRun = prefs.getBoolean("firstRun", true);
       if (firstRun) {
-         firstLoad();
+         reLoad();
          SharedPreferences.Editor editor = prefs.edit();
          editor.putBoolean("firstRun", false);
          editor.commit();
       }
    }
 
-   private void firstLoad() {
+   private void reLoad() {
       getLoaderManager().restartLoader(0, null, this).forceLoad();
    }
 
@@ -91,6 +91,8 @@ public class MainActivity extends AppCompatActivity
       SQLiteDatabase db = new NewsDatabaseHelper(this).getReadableDatabase();
       NewsCursor newsCursor = NewsDatabaseUtil.getAllNewsCursor(db);
       newsViewAdapter.swapCursor(newsCursor);
+      newsRecyclerView.setAdapter(newsViewAdapter);
+      newsViewAdapter.notifyDataSetChanged();
    }
 
    @Override public void onLoaderReset(Loader<Void> loader) {
@@ -108,7 +110,7 @@ public class MainActivity extends AppCompatActivity
          Log.d(TAG, "$$$ Refreshing news!");
          //[Mani]TODO: May restart loader here but since background job is
          // updating database every minute, we would just load from database.
-         displayNews();
+         reLoad();
       }
       return true;
    }
